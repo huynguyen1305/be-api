@@ -1,0 +1,67 @@
+image:
+  name: amazon/aws-cli
+oidc: true
+aws:
+  oidc-role: arn:aws:iam::646073756332:role/pipeline-ecr-access
+options:
+  docker: true
+  size: 2x
+definitions:
+  services:
+    docker:
+      memory: 5120
+      type: docker
+    docker-with-large-memory:
+      memory: 5120
+      type: docker
+pipelines:
+  branches:
+    main:
+      - step:
+          name: Build image
+          max-time: 20
+          script:
+            - export DOCKER_BUILDKIT=0
+            - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username $DOCKER_USERNAME --password-stdin $AWS_ECR_REPOSITORY;
+            - docker build -t $IMAGE_NAME .
+            - docker tag $IMAGE_NAME $IMAGE_NAME-$BITBUCKET_BUILD_NUMBER
+            - pipe: atlassian/aws-ecr-push-image:1.5.0
+              variables:
+                IMAGE_NAME: $IMAGE_NAME
+                TAGS: nexonplace-backend-$IMAGE_NAME-$BITBUCKET_BUILD_NUMBER
+            - pipe: atlassian/aws-ecr-push-image:1.5.0
+              variables:
+                IMAGE_NAME: $IMAGE_NAME
+                TAGS: game-experience-backend-latest
+      - step:
+          name: DEPLOY PRODUCTION SERVER
+          deployment: production
+          script:
+            - pipe: atlassian/ssh-run:0.4.2
+              variables:
+                SSH_USER: 'ec2-user'
+                SERVER: $SERVER
+                COMMAND: 'aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username $DOCKER_USERNAME --password-stdin $AWS_ECR_REPOSITORY; cd $HOME/game-experience; docker-compose pull get_be; docker-compose up -d; docker restart nginx;'
+          trigger: manual
+          services:
+            - docker-with-large-memory
+          size: 2x
+          caches:
+            - docker
+  pull-requests:
+    '**':
+      - step:
+          image: node:18
+          name: 'Build test'
+          caches:
+            - node
+          script:
+            - echo "Build in progress ..."
+            - npm install
+            - npm run build
+          artifacts:
+            download: true
+            paths:
+              - dist/**
+          services:
+            - docker

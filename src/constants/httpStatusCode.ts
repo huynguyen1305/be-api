@@ -1,0 +1,8 @@
+export const HttpStatusCode = {
+  INTERNAL_SERVER: 500,
+  BAD_REQUEST: 400,
+  NOT_FOUND: 404,
+  OK: 200,
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+};
