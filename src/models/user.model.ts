@@ -3,9 +3,10 @@ import mongoose, { Schema } from 'mongoose';
 export const UserSchema = new Schema(
   {
     username: { type: String, unique: true },
-    password: { type: String },
     email: { type: String, unique: true },
+    password: { type: String },
     role: { type: Schema.Types.ObjectId, ref: 'Role' },
+    isFirstLogin: { type: Boolean },
   },
   {
     timestamps: true,
