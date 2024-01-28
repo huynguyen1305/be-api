@@ -12,4 +12,4 @@ export const UserSchema = new Schema(
     timestamps: true,
   },
 );
-export const Project = mongoose.model('User', UserSchema);
+export const Users = mongoose.model('User', UserSchema);

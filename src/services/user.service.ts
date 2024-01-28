@@ -1,5 +1,5 @@
-import Users from '../models/users.model';
-import bcrypt from 'bcryptjs';
+import { Users } from '../models/user.model';
+// import bcrypt from 'bcryptjs';
 
 export const userService = {
   getAll: async () => {
@@ -40,17 +40,17 @@ export const userService = {
     }
     return user;
   },
-  changePassword: async (email: string, oldPassword: string, newPassword: string) => {
-    const user = await userService.getByEmail(email);
-    const isMatch = await bcrypt.compare(oldPassword, user.hashPassword);
-    if (!isMatch) {
-      throw new Error('email or password is not correct' + newPassword);
-    }
-    if (!user) {
-      throw new Error('User not found');
-    }
-    const newHashPassword = await bcrypt.hashSync(newPassword, 8);
-    const newUser = await Users.updateOne({ email: email }, { $set: { hashPassword: newHashPassword } });
-    return newUser;
-  },
+  // changePassword: async (email: string, oldPassword: string, newPassword: string) => {
+  //   const user = await userService.getByEmail(email);
+  //   const isMatch = await bcrypt.compare(oldPassword, user.hashPassword);
+  //   if (!isMatch) {
+  //     throw new Error('email or password is not correct' + newPassword);
+  //   }
+  //   if (!user) {
+  //     throw new Error('User not found');
+  //   }
+  //   const newHashPassword = await bcrypt.hashSync(newPassword, 8);
+  //   const newUser = await Users.updateOne({ email: email }, { $set: { hashPassword: newHashPassword } });
+  //   return newUser;
+  // },
 };
