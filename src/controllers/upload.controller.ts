@@ -3,9 +3,10 @@ import { HttpStatusCode, SUCCESS } from '../constants';
 import createResponse from '../utils/createResponse';
 import { filesToURL } from '../utils/image';
 
-export const uploadImageController = (req: any, res: Response, next: NextFunction) => {
+export const uploadFileController = (req: any, res: Response, next: NextFunction) => {
   try {
-    const files = req.files.files;
+    const files = req.files.file;
+    console.log('=====================', typeof req.files, JSON.stringify(req.files));
     const data = filesToURL(files);
 
     return res.status(HttpStatusCode.OK).json(createResponse({ code: HttpStatusCode.OK, data, message: SUCCESS }));

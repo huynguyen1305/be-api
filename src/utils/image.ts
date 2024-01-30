@@ -12,7 +12,8 @@ export const removeOldImage = (filesUrl: string[]) => {
 
 export const filesToURL = (files: Express.Multer.File[]) => {
   const basePathAssets = process.env.SERVER_URL + '/files/';
-  return files.map(file => {
+  console.log(files);
+  return files?.map(file => {
     return {
       url: basePathAssets + file.filename,
       name: file.originalname,
