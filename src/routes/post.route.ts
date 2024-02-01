@@ -55,6 +55,36 @@ postRoute.get('/', async (req: Request, res) => {
     data: posts,
   });
 });
-// // employeeRoute.post('/file');
+
+postRoute.get('/:slug', async (req, res) => {
+  const slug = req.params.slug;
+  const post = await Post.findOne({ slug });
+  return res.status(200).json({
+    code: 200,
+    message: 'OK',
+    data: post,
+  });
+});
+
+postRoute.patch('/:slug', async (req, res) => {
+  const slug = req.params.slug;
+  const data = req.body;
+  const post = await Post.findOneAndUpdate({ slug }, data);
+  return res.status(200).json({
+    code: 200,
+    message: 'OK',
+    data: post,
+  });
+});
+
+postRoute.delete('/:slug', async (req, res) => {
+  const slug = req.params.slug;
+  const post = await Post.findOneAndDelete({ slug });
+  return res.status(200).json({
+    code: 200,
+    message: 'OK',
+    data: post,
+  });
+});
 
 export default postRoute;
