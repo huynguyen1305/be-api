@@ -7,6 +7,14 @@ const postRoute: IRouter = express.Router();
 
 postRoute.post('/', async (req, res) => {
   const data = req.body;
+  const isHasPost = await Post.findOne({ slug: data.slug });
+  if (isHasPost) {
+    return res.status(400).json({
+      code: 400,
+      message: 'Post already exists',
+      data: isHasPost,
+    });
+  }
   const newPost = await Post.create({
     ...data,
     valueSearch: convertToSlug(data.title, ' '),

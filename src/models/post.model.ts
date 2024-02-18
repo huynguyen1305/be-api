@@ -11,6 +11,7 @@ export const PostSchema = new Schema(
     feature_audio: { type: String },
     category: { type: [String] },
     isPublic: { type: Boolean },
+    isVideo: { type: Boolean },
   },
   {
     timestamps: true,
