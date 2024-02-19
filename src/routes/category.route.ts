@@ -24,7 +24,7 @@ categoryRoute.post('/', async (req, res) => {
 });
 
 categoryRoute.get('/', async (req, res) => {
-  const categories = await Category.find({});
+  const categories = await Category.find({}).sort({ slug: 1 });
 
   return res.status(200).json({
     code: 200,
