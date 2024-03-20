@@ -38,6 +38,28 @@ userRoute.get('/:username', async (req: any, res) => {
   );
 });
 
+userRoute.patch('/:username', async (req: any, res) => {
+  const user = await Users.findOneAndUpdate({ username: req.body.username }, { $set: req.body });
+  res.status(HttpStatusCode.OK).json(
+    createResponse({
+      code: HttpStatusCode.OK,
+      message: 'Update user success',
+      data: user,
+    }),
+  );
+});
+
+userRoute.delete('/:username', async (req: any, res) => {
+  const user = await Users.findOneAndDelete({ username: req.body.username });
+  res.status(HttpStatusCode.OK).json(
+    createResponse({
+      code: HttpStatusCode.OK,
+      message: 'Delete user success',
+      data: user,
+    }),
+  );
+});
+
 userRoute.post('/register', async (req: any, res) => {
   Users.register(new Users({ username: req.body.username, displayName: req.body.displayName }), req.body.password, function (err, user) {
     if (err) {
