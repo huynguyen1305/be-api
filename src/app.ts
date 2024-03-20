@@ -10,7 +10,9 @@ import { APIError } from './utils/BaseError';
 import createResponse from './utils/createResponse';
 import path from 'path';
 
+const passport = require('passport');
 const app: Application = express();
+const session = require('express-session');
 
 const allowedOrigins = process.env.CORS_PAGES?.split(',') || ['*'];
 
@@ -29,7 +31,9 @@ app.use(
   }),
 );
 app.use(express.json());
-
+app.use(session({ secret: 'ongbatoi.vn', resave: true, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(loggerAPI);
 
 app.disable('x-powered-by');

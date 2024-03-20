@@ -1,15 +1,17 @@
 import mongoose, { Schema } from 'mongoose';
+import passportLocalMongoose from 'passport-local-mongoose';
 
 export const UserSchema = new Schema(
   {
     username: { type: String, unique: true },
-    email: { type: String, unique: true },
     password: { type: String },
-    role: { type: Schema.Types.ObjectId, ref: 'Role' },
-    isFirstLogin: { type: Boolean },
+    displayName: { type: String },
   },
   {
     timestamps: true,
   },
 );
+
+UserSchema.plugin(passportLocalMongoose);
+
 export const Users = mongoose.model('User', UserSchema);
