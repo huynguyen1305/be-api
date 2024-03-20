@@ -15,7 +15,29 @@ passport.serializeUser(Users.serializeUser());
 passport.deserializeUser(Users.deserializeUser());
 
 // userRoute.post('/image', employeController);
-userRoute.get('/');
+userRoute.get('/', async (req: any, res) => {
+  const users = await Users.find();
+  res.status(HttpStatusCode.OK).json(
+    createResponse({
+      code: HttpStatusCode.OK,
+      message: 'Get user success',
+      data: users,
+    }),
+  );
+});
+
+userRoute.get('/:username', async (req: any, res) => {
+  const username = req.params.username;
+  const user = await Users.findOne({ username: username });
+  res.status(HttpStatusCode.OK).json(
+    createResponse({
+      code: HttpStatusCode.OK,
+      message: 'Get user success',
+      data: user,
+    }),
+  );
+});
+
 userRoute.post('/register', async (req: any, res) => {
   Users.register(new Users({ username: req.body.username, displayName: req.body.displayName }), req.body.password, function (err, user) {
     if (err) {
