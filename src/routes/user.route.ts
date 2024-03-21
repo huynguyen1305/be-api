@@ -3,6 +3,7 @@ import express, { IRouter } from 'express';
 import passport from 'passport';
 import { Users } from '../models/user.model';
 import createResponse from '../utils/createResponse';
+import { jwtDecode } from 'jwt-decode';
 
 const jwt = require('jsonwebtoken');
 const LocalStrategy = require('passport-local').Strategy;
@@ -26,9 +27,35 @@ userRoute.get('/', async (req: any, res) => {
   );
 });
 
-userRoute.get('/:username', async (req: any, res) => {
-  const username = req.params.username;
-  const user = await Users.findOne({ username: username });
+userRoute.get('/find-by-id/:id', async (req: any, res) => {
+  const { id } = req.params;
+  const user = await Users.findOne({ _id: id });
+  res.status(HttpStatusCode.OK).json(
+    createResponse({
+      code: HttpStatusCode.OK,
+      message: 'Get user success',
+      data: user,
+    }),
+  );
+});
+
+// userRoute.get('/:username', async (req: any, res) => {
+//   const username = req.params.username;
+//   const user = await Users.findOne({ username: username });
+//   res.status(HttpStatusCode.OK).json(
+//     createResponse({
+//       code: HttpStatusCode.OK,
+//       message: 'Get user success',
+//       data: user,
+//     }),
+//   );
+// });
+
+userRoute.get('/me', async (req: any, res) => {
+  // console.log('====', { req: req, user: req.user });
+  const { userId, username } = jwtDecode<{ userId: string; username: string }>(req.headers.authorization || '', {});
+  const user = await Users.findOne({ _id: userId });
+  console.log('====', userId, username, user);
   res.status(HttpStatusCode.OK).json(
     createResponse({
       code: HttpStatusCode.OK,

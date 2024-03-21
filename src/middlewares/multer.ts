@@ -14,7 +14,7 @@ export const multerMiddleware = (dest: string) => {
     },
     filename: function (_req, file: Express.Multer.File, cb) {
       const uniqueSuffix = Date.now().toString() + Math.round(Math.random() * 1e9);
-      cb(null, uniqueSuffix + '-' + file.originalname);
+      cb(null, uniqueSuffix + '+-_-+' + file.originalname);
     },
   });
 

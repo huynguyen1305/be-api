@@ -17,6 +17,7 @@ postRoute.post('/', async (req, res) => {
   }
   const newPost = await Post.create({
     ...data,
+    author: data.author._id,
     valueSearch: convertToSlug(data.title, ' '),
   });
 

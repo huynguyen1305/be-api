@@ -12,6 +12,7 @@ export const PostSchema = new Schema(
     category: { type: [String] },
     isPublic: { type: Boolean },
     isVideo: { type: Boolean },
+    author: { type: Schema.Types.ObjectId, ref: 'User' },
   },
   {
     timestamps: true,
