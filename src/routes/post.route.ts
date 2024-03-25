@@ -56,7 +56,7 @@ postRoute.get('/', async (req: Request, res) => {
     delete query.$text;
   }
 
-  const posts = await Post.find(query).skip(skip).limit(limit).sort({ createdAt: -1 }).exec();
+  const posts = await Post.find(query).populate('author').skip(skip).limit(limit).sort({ createdAt: -1 }).exec();
 
   return res.status(200).json({
     code: 200,
@@ -67,7 +67,7 @@ postRoute.get('/', async (req: Request, res) => {
 
 postRoute.get('/:slug', async (req, res) => {
   const slug = req.params.slug;
-  const post = await Post.findOne({ slug });
+  const post = await Post.findOne({ slug }).populate('author');
   return res.status(200).json({
     code: 200,
     message: 'OK',
