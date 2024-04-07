@@ -71,7 +71,7 @@ postRoute.get('/', async (req: Request, res) => {
 });
 
 postRoute.get('/find-all', async (req: any, res) => {
-  const users = await Post.find({});
+  const users = await Post.find({}).sort({ createdAt: -1 });
   res.status(HttpStatusCode.OK).json(
     createResponse({
       code: HttpStatusCode.OK,
