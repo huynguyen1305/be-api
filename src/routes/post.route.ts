@@ -41,7 +41,7 @@ postRoute.get('/', async (req: Request, res) => {
   const categoryList = req.query?.category || categoryFull;
   const isPublic = req.query?.isPublic || [true, false];
 
-  console.log('categoryList', categoryList);
+  // console.log('categoryList', categoryList);
 
   const query: any = {
     category: {
@@ -50,6 +50,8 @@ postRoute.get('/', async (req: Request, res) => {
     isPublic: {
       $in: isPublic,
     },
+    // exclude properties content
+    content: { $exists: false },
     $text: {
       $search: searchText,
       $caseSensitive: false,
@@ -61,7 +63,7 @@ postRoute.get('/', async (req: Request, res) => {
   }
 
   const posts = await Post.find(query).populate('author').skip(skip).limit(limit).sort({ createdAt: -1 }).exec();
-  console.log('posts', posts);
+  // console.log('posts', posts);
 
   return res.status(200).json({
     code: 200,
