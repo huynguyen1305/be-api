@@ -51,7 +51,6 @@ postRoute.get('/', async (req: Request, res) => {
       $in: isPublic,
     },
     // exclude properties content
-    content: { $exists: false },
     $text: {
       $search: searchText,
       $caseSensitive: false,
@@ -62,7 +61,7 @@ postRoute.get('/', async (req: Request, res) => {
     delete query.$text;
   }
 
-  const posts = await Post.find(query).populate('author').skip(skip).limit(limit).sort({ createdAt: -1 }).exec();
+  const posts = await Post.find(query).populate('author').skip(skip).limit(limit).sort({ createdAt: -1 }).select('-content').exec();
   // console.log('posts', posts);
 
   return res.status(200).json({
